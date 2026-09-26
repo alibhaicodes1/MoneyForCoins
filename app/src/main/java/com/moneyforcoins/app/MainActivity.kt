@@ -1,5 +1,6 @@
 package com.moneyforcoins.app
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
@@ -13,7 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
-
+import com.google.firebase.auth.FirebaseAuth
 class MainActivity : AppCompatActivity() {
 
     private lateinit var content: LinearLayout
@@ -794,14 +795,17 @@ class MainActivity : AppCompatActivity() {
         )
 
         content.addView(
-            button("🔒 Logout") {
-                Toast.makeText(
-                    this,
-                    "Logout will be connected to secure authentication.",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        )
+    button("🔒 Logout") {
+        FirebaseAuth.getInstance().signOut()
+
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+        startActivity(intent)
+        finish()
+    }
+)
 
         addBottomNavigation("Profile")
     }
