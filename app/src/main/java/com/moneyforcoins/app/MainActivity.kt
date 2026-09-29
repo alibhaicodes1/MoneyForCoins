@@ -280,7 +280,7 @@ class MainActivity : AppCompatActivity() {
 
         balance.addView(
             text(
-                "2,450",
+                "0",
                 38f,
                 Color.WHITE,
                 true
