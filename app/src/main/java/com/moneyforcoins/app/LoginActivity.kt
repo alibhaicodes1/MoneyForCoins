@@ -1,5 +1,7 @@
 package com.moneyforcoins.app
 
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FieldValue
 import android.content.Intent
 import android.os.Bundle
 import android.graphics.Color
@@ -157,13 +159,50 @@ class LoginActivity : AppCompatActivity() {
                 .addOnCompleteListener { task ->
 
                     if (task.isSuccessful) {
-                        Toast.makeText(
-                            this,
-                            "Account created successfully",
-                            Toast.LENGTH_SHORT
-                        ).show()
 
-                        openHome()
+    val user = auth.currentUser
+
+    if (user != null) {
+
+        val userData = hashMapOf(
+            "uid" to user.uid,
+            "email" to (user.email ?: ""),
+            "coinBalance" to 0L,
+            "createdAt" to FieldValue.serverTimestamp()
+        )
+
+        FirebaseFirestore.getInstance()
+            .collection("users")
+            .document(user.uid)
+            .set(userData)
+            .addOnSuccessListener {
+
+                Toast.makeText(
+                    this,
+                    "Account created successfully",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                openHome()
+            }
+            .addOnFailureListener { error ->
+
+                Toast.makeText(
+                    this,
+                    "Profile setup failed: ${error.message}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+
+    } else {
+
+        Toast.makeText(
+            this,
+            "Account created, but user data not found",
+            Toast.LENGTH_LONG
+        ).show()
+    }
+                    }
                     } else {
                         Toast.makeText(
                             this,
