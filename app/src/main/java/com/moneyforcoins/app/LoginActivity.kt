@@ -1,5 +1,6 @@
 package com.moneyforcoins.app
 
+import android.widget.ImageView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FieldValue
 import android.content.Intent
@@ -41,10 +42,13 @@ class LoginActivity : AppCompatActivity() {
             setBackgroundColor(Color.rgb(247, 247, 250))
         }
 
-        val logo = TextView(this).apply {
-            text = "🪙"
-            textSize = 55f
-            gravity = Gravity.CENTER
+        val logo = ImageView(this).apply {
+    setImageResource(R.drawable.money_logo)
+    layoutParams = LinearLayout.LayoutParams(
+        180,
+        180
+    )
+    scaleType = ImageView.ScaleType.CENTER_CROP
         }
 
         val title = TextView(this).apply {
