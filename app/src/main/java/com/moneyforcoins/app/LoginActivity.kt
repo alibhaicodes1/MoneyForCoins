@@ -1,19 +1,19 @@
 package com.moneyforcoins.app
 
-import android.widget.ImageView
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FieldValue
 import android.content.Intent
 import android.os.Bundle
 import android.graphics.Color
 import android.view.Gravity
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 
 class LoginActivity : AppCompatActivity() {
 
@@ -43,12 +43,14 @@ class LoginActivity : AppCompatActivity() {
         }
 
         val logo = ImageView(this).apply {
-    setImageResource(R.drawable.money_logo)
-    layoutParams = LinearLayout.LayoutParams(
-        180,
-        180
-    )
-    scaleType = ImageView.ScaleType.CENTER_CROP
+            setImageResource(R.drawable.money_logo)
+
+            layoutParams = LinearLayout.LayoutParams(
+                180,
+                180
+            )
+
+            scaleType = ImageView.ScaleType.CENTER_CROP
         }
 
         val title = TextView(this).apply {
@@ -67,14 +69,16 @@ class LoginActivity : AppCompatActivity() {
 
         val emailInput = EditText(this).apply {
             hint = "Email"
-            inputType = android.text.InputType.TYPE_CLASS_TEXT or
-                    android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+            inputType =
+                android.text.InputType.TYPE_CLASS_TEXT or
+                android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
         }
 
         val passwordInput = EditText(this).apply {
             hint = "Password"
-            inputType = android.text.InputType.TYPE_CLASS_TEXT or
-                    android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+            inputType =
+                android.text.InputType.TYPE_CLASS_TEXT or
+                android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
         }
 
         val loginButton = Button(this).apply {
@@ -101,17 +105,20 @@ class LoginActivity : AppCompatActivity() {
 
         setContentView(root)
 
+        // LOGIN
         loginButton.setOnClickListener {
 
             val email = emailInput.text.toString().trim()
             val password = passwordInput.text.toString()
 
             if (email.isEmpty() || password.isEmpty()) {
+
                 Toast.makeText(
                     this,
                     "Email and password required",
                     Toast.LENGTH_SHORT
                 ).show()
+
                 return@setOnClickListener
             }
 
@@ -119,6 +126,7 @@ class LoginActivity : AppCompatActivity() {
                 .addOnCompleteListener { task ->
 
                     if (task.isSuccessful) {
+
                         Toast.makeText(
                             this,
                             "Login successful",
@@ -126,7 +134,9 @@ class LoginActivity : AppCompatActivity() {
                         ).show()
 
                         openHome()
+
                     } else {
+
                         Toast.makeText(
                             this,
                             task.exception?.message ?: "Login failed",
@@ -136,26 +146,31 @@ class LoginActivity : AppCompatActivity() {
                 }
         }
 
+        // CREATE ACCOUNT
         signupButton.setOnClickListener {
 
             val email = emailInput.text.toString().trim()
             val password = passwordInput.text.toString()
 
             if (email.isEmpty() || password.isEmpty()) {
+
                 Toast.makeText(
                     this,
                     "Enter email and password",
                     Toast.LENGTH_SHORT
                 ).show()
+
                 return@setOnClickListener
             }
 
             if (password.length < 6) {
+
                 Toast.makeText(
                     this,
                     "Password must be at least 6 characters",
                     Toast.LENGTH_SHORT
                 ).show()
+
                 return@setOnClickListener
             }
 
@@ -164,50 +179,51 @@ class LoginActivity : AppCompatActivity() {
 
                     if (task.isSuccessful) {
 
-    val user = auth.currentUser
+                        val user = auth.currentUser
 
-    if (user != null) {
+                        if (user != null) {
 
-        val userData = hashMapOf(
-            "uid" to user.uid,
-            "email" to (user.email ?: ""),
-            "coinBalance" to 0L,
-            "createdAt" to FieldValue.serverTimestamp()
-        )
+                            val userData = hashMapOf(
+                                "uid" to user.uid,
+                                "email" to (user.email ?: ""),
+                                "coinBalance" to 0L,
+                                "createdAt" to FieldValue.serverTimestamp()
+                            )
 
-        FirebaseFirestore.getInstance()
-            .collection("users")
-            .document(user.uid)
-            .set(userData)
-            .addOnSuccessListener {
+                            FirebaseFirestore.getInstance()
+                                .collection("users")
+                                .document(user.uid)
+                                .set(userData)
+                                .addOnSuccessListener {
 
-                Toast.makeText(
-                    this,
-                    "Account created successfully",
-                    Toast.LENGTH_SHORT
-                ).show()
+                                    Toast.makeText(
+                                        this,
+                                        "Account created successfully",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
 
-                openHome()
-            }
-            .addOnFailureListener { error ->
+                                    openHome()
+                                }
+                                .addOnFailureListener { error ->
 
-                Toast.makeText(
-                    this,
-                    "Profile setup failed: ${error.message}",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
+                                    Toast.makeText(
+                                        this,
+                                        "Profile setup failed: ${error.message}",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
 
-    } else {
+                        } else {
 
-        Toast.makeText(
-            this,
-            "Account created, but user data not found",
-            Toast.LENGTH_LONG
-        ).show()
-    }
-                    }
+                            Toast.makeText(
+                                this,
+                                "Account created, but user data not found",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+
                     } else {
+
                         Toast.makeText(
                             this,
                             task.exception?.message ?: "Signup failed",
@@ -218,17 +234,27 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun addSpace(root: LinearLayout, height: Int) {
+    private fun addSpace(
+        root: LinearLayout,
+        height: Int
+    ) {
         val space = TextView(this)
+
         space.layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             height
         )
+
         root.addView(space)
     }
 
     private fun openHome() {
-        val intent = Intent(this, MainActivity::class.java)
+
+        val intent = Intent(
+            this,
+            MainActivity::class.java
+        )
+
         startActivity(intent)
         finish()
     }
