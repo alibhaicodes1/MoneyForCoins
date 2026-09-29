@@ -72,6 +72,10 @@ class LoginActivity : AppCompatActivity() {
             inputType =
                 android.text.InputType.TYPE_CLASS_TEXT or
                 android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+            setTextColor(Color.BLACK)
+            setHintTextColor(Color.GRAY)
+            setBackgroundColor(Color.WHITE)
+            setPadding(20, 10, 20, 10)
         }
 
         val passwordInput = EditText(this).apply {
@@ -79,6 +83,10 @@ class LoginActivity : AppCompatActivity() {
             inputType =
                 android.text.InputType.TYPE_CLASS_TEXT or
                 android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+            setTextColor(Color.BLACK)
+            setHintTextColor(Color.GRAY)
+            setBackgroundColor(Color.WHITE)
+            setPadding(20, 10, 20, 10)
         }
 
         val loginButton = Button(this).apply {
